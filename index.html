@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reservas Salas - IA · Demostración</title>
+  <link rel="stylesheet" href="estilos.css">
+  <script src="prototipo.js" defer></script>
+</head>
+<body>
+  <div class="demo">DEMOSTRACIÓN · Datos ficticios · Sin conexión con cuentas corporativas</div>
+  <header><div><span class="eyebrow">AYUNTAMIENTO · PROTOTIPO</span><h1>Reservas Salas - IA</h1></div><span id="identidad" hidden>María · Usuario simulado</span></header>
+  <main>
+    <section id="acceso" class="login card">
+      <span class="eyebrow">ACCESO</span><h2>Tu próxima reunión, en su sala</h2>
+      <p>Consulta las salas disponibles y reserva un horario para tu reunión.</p>
+      <div class="notice"><strong>Acceso simulado</strong><p>Esta demostración te identifica como María, personal del Ayuntamiento. No verifica cuentas corporativas ni utiliza Microsoft Entra ID.</p></div>
+      <button id="entrar" type="button">Entrar como usuario de demostración</button>
+    </section>
+    <div id="aplicacion" hidden>
+      <nav aria-label="Pantallas"><button id="nav-agenda" type="button" aria-current="page">Salas y disponibilidad</button><button id="nav-mis" type="button">Mis reservas</button></nav>
+      <div id="mensaje" role="status" aria-live="polite" hidden></div>
+      <section id="agenda">
+        <div class="section-heading"><div><h2>Salas y disponibilidad</h2><p>Lunes a viernes · 07:00–16:00. El concepto de cada reunión es visible para todo el personal con acceso.</p></div><label>Fecha de la agenda<input id="fecha-agenda" type="date" required></label></div>
+        <p id="dia-agenda" class="day"></p>
+        <div id="columnas" class="rooms"></div>
+        <section class="card booking" aria-labelledby="titulo-reserva">
+          <h2 id="titulo-reserva">Nueva reserva</h2><p>Se confirmará automáticamente si la sala está disponible. Puedes reservar para el mismo día; no se exigen 24 horas de antelación.</p>
+          <form id="form-reserva" novalidate>
+            <div class="fields">
+              <label>Sala<select id="sala" required></select></label>
+              <label class="concept">Nombre o concepto de la reunión<input id="concepto" type="text" required placeholder="Ej. Coordinación del equipo"></label>
+              <label>Fecha<input id="fecha-reserva" type="date" required></label>
+              <label>Hora de inicio<input id="inicio" type="time" min="07:00" max="16:00" required></label>
+              <label>Hora de fin<input id="fin" type="time" min="07:00" max="16:00" required></label>
+            </div>
+            <p id="error" role="alert" hidden></p><button type="submit">Confirmar reserva</button>
+          </form>
+        </section>
+      </section>
+      <section id="mis-reservas" hidden><h2>Mis reservas</h2><p>Reservas del usuario simulado María. Puedes consultar y cancelar las tuyas.</p><div id="lista-mis"></div></section>
+      <section class="card booking" aria-labelledby="titulo-normativa">
+        <h2 id="titulo-normativa">Normativa de uso</h2>
+        <ul>
+          <li>Respetar el aforo máximo.</li>
+          <li>Dejar la sala ordenada al finalizar.</li>
+          <li>Respetar el horario reservado.</li>
+          <li>Cancelar la reserva si la reunión no se va a celebrar.</li>
+        </ul>
+      </section>
+    </div>
+  </main>
+  <footer>Prototipo para revisar pantallas y recorrido · Los cambios duran hasta recargar la página.</footer>
+</body>
+</html>

@@ -1,0 +1,16 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const vm = require('node:vm');
+const slides = [{hidden:false},{hidden:false}];
+const status = {textContent:''};
+const controls = {hidden:true};
+const prev = {addEventListener(type, callback){this[type]=callback;}};
+const next = {addEventListener(type, callback){this[type]=callback;}};
+const elements={'[data-carousel-status]':status,'[data-carousel-controls]':controls,'[data-carousel-prev]':prev,'[data-carousel-next]':next};
+const carousel={querySelectorAll(){return slides},querySelector(selector){return elements[selector]}};
+vm.runInNewContext(fs.readFileSync('public/app.js','utf8'),{document:{querySelectorAll(selector){return selector==='[data-carousel]'?[carousel]:[]}},setInterval(){throw Error('Avance automático no permitido')},setTimeout(){throw Error('Avance automático no permitido')}});
+assert.equal(controls.hidden,false);assert.deepEqual(slides.map(s=>s.hidden),[false,true]);assert.equal(status.textContent,'1 de 2');
+next.click();assert.deepEqual(slides.map(s=>s.hidden),[true,false]);assert.equal(status.textContent,'2 de 2');
+next.click();assert.deepEqual(slides.map(s=>s.hidden),[false,true]);
+prev.click();assert.deepEqual(slides.map(s=>s.hidden),[true,false]);
+console.log('CARRUSEL: anterior/siguiente, vuelta al principio, una foto visible y estado accesible comprobados sin avance automático.');

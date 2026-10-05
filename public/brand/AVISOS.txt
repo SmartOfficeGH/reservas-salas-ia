@@ -1,0 +1,16 @@
+Logotipo oficial del Ajuntament de Palma
+Origen: RV_ LOGO Ajuntament de Palma.zip / Logo Ajuntament - Azul.png.
+Copia íntegra, sin modificación. Uso en la aplicación municipal Aplicación Reserva Salas.
+Los materiales suministrados no incluyen una licencia abierta para el logotipo.
+
+Open Sans Regular
+Copyright 2020 The Open Sans Project Authors (https://github.com/googlefonts/opensans)
+SIL Open Font License 1.1; texto completo en open-sans-OFL.txt.
+
+Poppins Regular
+Copyright 2020 The Poppins Project Authors (https://github.com/itfoundry/Poppins)
+SIL Open Font License 1.1; texto completo en poppins-OFL.txt.
+
+Fuentes WOFF2 extraídas sin alterar de css-comun.css del paquete suministrado
+css-sedipualba_v_1_0.7z. Se conservan los metadatos y avisos originales.
+Los estilos adaptados y sus limitaciones se describen en IDENTIDAD-CORPORATIVA.md.

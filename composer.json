@@ -1,0 +1,14 @@
+{
+  "name": "smartoffice/reservas-salas",
+  "description": "Reservas internas de salas del Ayuntamiento",
+  "type": "project",
+  "require": {
+    "php": "~8.4.0",
+    "ext-pdo": "*",
+    "ext-pdo_mysql": "*",
+    "ext-mbstring": "*",
+    "ext-openssl": "*",
+    "phpmailer/phpmailer": "^7.0"
+  },
+  "config": {"sort-packages": true, "vendor-dir": "private/vendor", "cache-dir": ".tools/composer-cache"}
+}

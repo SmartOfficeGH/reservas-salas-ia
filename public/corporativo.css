@@ -1,0 +1,37 @@
+/* Adaptación de la capa Palma de Sedipualba: tipografía, enlaces, foco y paneles.
+   Paleta prioritaria: Colores nueva marca logo Ayuntamiento.pdf.
+   Fuentes originales sin modificar; avisos y OFL en brand/. */
+@font-face{font-family:"Open Sans Palma";src:url("brand/open-sans-regular.woff2") format("woff2");font-style:normal;font-weight:400;font-display:swap}
+@font-face{font-family:"Poppins Palma";src:url("brand/poppins-regular.woff2") format("woff2");font-style:normal;font-weight:400;font-display:swap}
+:root{--palma-azul:#09548a;--palma-azul-hover:#073f68;--palma-azul-tenue:#e6eff5;--palma-turquesa:#00b3cb;--palma-gris:#7c8687;--palma-texto:#191816;--palma-texto-suave:#4d585b;--palma-borde:#d5dde1;--palma-blanco:#fff;font-family:"Open Sans Palma","Open Sans","Segoe UI",Arial,sans-serif;color:var(--palma-texto);background:#f5f7f8}
+body{border-top:5px solid var(--palma-azul)}
+header{padding-top:24px;padding-bottom:24px;min-width:0}
+.brand-heading{display:flex;align-items:center;gap:28px;min-width:0}
+.official-logo{display:block;width:230px;max-width:100%;height:auto;flex-shrink:0;object-fit:contain;background:#fff;border-radius:0;padding:0;filter:none}
+.app-heading{border-left:1px solid var(--palma-borde);padding-left:28px}
+h1,h2,h3{font-family:"Poppins Palma","Open Sans Palma",Arial,sans-serif;line-height:1.4}
+h1{font-size:24px}h2{font-size:22px}h3{font-size:17px}.eyebrow{color:var(--palma-azul);letter-spacing:1.1px;font-size:10px}
+header>div:last-child>span{overflow-wrap:anywhere;font-size:13px;color:var(--palma-texto-suave)}
+.card,.room{border-color:var(--palma-borde);box-shadow:0 2px 8px #19181605}
+.room-head{background:#fff;border-top:4px solid var(--palma-azul);padding:22px}.room-head p{color:var(--palma-texto-suave)}
+.room-detail{display:flex;align-items:flex-start;gap:9px}.room-detail .detail-icon{display:block;width:18px;height:18px;flex:0 0 18px;margin-top:2px}.room-detail span{min-width:0}
+.login{border-top:4px solid var(--palma-azul)}.login h2{font-size:27px}
+button,.logout-button{background:var(--palma-azul);color:#fff;min-height:44px}
+button:hover,.logout-button:hover{background:var(--palma-azul-hover);color:#fff}
+button.secondary{background:var(--palma-azul-tenue);color:var(--palma-azul)}
+nav{flex-wrap:wrap;border-color:var(--palma-borde)}nav a{border:1px solid transparent}nav a[aria-current]{background:var(--palma-azul-tenue);color:var(--palma-azul);border-bottom:3px solid var(--palma-azul)}nav a:hover{background:var(--palma-azul-tenue);color:var(--palma-azul-hover)}
+a,.auth-links a,.location-link{color:var(--palma-azul);text-underline-offset:3px}a:hover{color:var(--palma-azul-hover)}
+input,select{border-color:var(--palma-gris);color:var(--palma-texto);min-height:44px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--palma-azul);outline-offset:3px}
+.occupation-gap:focus-visible{outline-offset:-3px;box-shadow:inset 0 0 0 5px #fff}
+.occupation-event:focus-visible{outline-color:var(--palma-turquesa);box-shadow:0 0 0 5px var(--palma-azul)}
+.occupation-event,.occupation-event-label{background:var(--palma-azul);border-color:var(--palma-azul);color:#fff}
+.occupation-gap{background:#eef6f8;color:var(--palma-azul);min-height:0}.occupation-gap:hover{background:#d9edf2;color:var(--palma-azul-hover)}
+.occupation-gap.unavailable{color:var(--palma-texto-suave);background:repeating-linear-gradient(135deg,#edf0f2,#edf0f2 7px,#e4e9ed 7px,#e4e9ed 9px)}
+.period-buttons a{background:var(--palma-azul-tenue);color:var(--palma-azul);min-height:44px}.period-buttons a:hover{background:#d9e6ef}.month-cell[aria-current]{outline-color:var(--palma-azul)}
+.carousel-controls button{min-height:0}.carousel-controls button:hover{background:var(--palma-azul)}.carousel-controls button:focus-visible{outline-color:#fff;box-shadow:0 0 0 6px var(--palma-azul)}
+.carousel-slide figcaption{color:#fff}.carousel-slide figcaption strong{font-family:"Poppins Palma",Arial,sans-serif}
+.cancel{background:#fff;color:#9a3030}.cancel:hover{background:#fff0ef;color:#9a3030}
+footer{border-top:1px solid var(--palma-borde);color:var(--palma-texto-suave);background:#fff}
+@media(max-width:900px){.brand-heading{gap:18px}.official-logo{width:195px}.app-heading{padding-left:18px}h1{font-size:21px}}
+@media(max-width:700px){.brand-heading{flex-direction:column;align-items:flex-start;gap:16px}.official-logo{width:210px}.app-heading{border-left:0;padding-left:0}.login{padding:22px}.login h2{font-size:24px}header{gap:16px}.fields{gap:16px}nav a{font-size:14px;padding:10px 12px}.room-head{padding:18px}}

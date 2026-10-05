@@ -1,0 +1,12 @@
+/private/config.php
+/private/storage/
+/vendor/
+/private/vendor/
+/tests/__pycache__/
+/.tools/
+/.test-data/
+/dist/
+*.log
+.env
+
+/RE__Estilo_corporativo_/

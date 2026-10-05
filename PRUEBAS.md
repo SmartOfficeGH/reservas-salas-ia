@@ -90,3 +90,19 @@ Verificación de esta actualización: 21 comprobaciones de calendario, 47 de ocu
 ## Nombre visible actualizado
 
 «Aplicación Reserva Salas» en cabecera, pestañas, pie, remitente, asunto y cuerpo de verificación/recuperación. 57 comprobaciones HTTP y 83 de navegador correctas; título revisado visualmente a 390 px, sin desbordamiento. Los mensajes locales capturados usan el mismo contenido que SMTP, sin enviar correos reales. Se conservan los nombres técnicos de carpeta y repositorio.
+
+## Consulta pública y compartir
+
+- `tests/public.php`: 40 comprobaciones de acceso anónimo, proyección de base de datos limitada a sala/fecha/inicio/fin, ausencia de conceptos/correos/identificadores de reservas en HTML y atributos, salas activas, horarios exactos, estados, caché desactivada y ausencia de cookies de sesión, métodos POST rechazados, GET con acciones sin efecto, parámetros malformados, filtros Día/Semana/Mes, fecha actual Madrid y enlaces generados con URL de producción. Comprobada la actualización tras cancelar una reserva sintética.
+- Con `--browser` se añade una comprobación del resultado de la revisión de navegador: total PHP 41. La reserva sintética pertenece a una cuenta verificada mediante el flujo de token de prueba, se usa solo en la base local y se elimina junto con la cuenta en finally incluso si falla la revisión.
+- `tests/public-browser.cjs`: 48 comprobaciones con Edge a 1280 y 390 px. Revisadas capturas de Día/Semana/Mes y un iframe real con origen distinto (servidor HTTP local temporal). Sin desbordamiento de página; el desplazamiento ancho queda dentro del calendario. Bloque real de 09:10–09:45 visible con duración proporcional y sin concepto. Huecos sin acciones; Actualizar conserva estado; filtros, periodo anterior/siguiente, Hoy y Mes a Día funcionan.
+- Comprobadas copia de enlace e iframe con título accesible, conservación de vista/sala/fecha explícita, omisión de fecha implícita y alternativa manual cuando el portapapeles rechaza la copia. El iframe público carga; el navegador bloquea de verdad el iframe de la agenda autenticada por su política de inserción.
+- Repetidas las 57 comprobaciones HTTP autenticadas, 28 unitarias, 31 de integración, protección de solapamientos simultáneos, 21 de calendario y 47 de ocupación. Sin SMTP ni acceso al hosting. No hay migración de base de datos por esta ampliación.
+
+Para repetir, arrancar la aplicación local y ejecutar primero `tests/test_web.py`, después `php tests/public.php`. Para incluir el navegador, tener Node/Playwright disponibles y ejecutar `php tests/public.php --browser`; `BROWSER_EXECUTABLE` permite elegir un ejecutable compatible (Edge de Windows por defecto). El servidor temporal de inserción usa un puerto libre en 127.0.0.1 y se cierra al terminar; las capturas se guardan en `.test-data/public/`, fuera de Git y del paquete.
+
+Pendiente en hosting: comprobar cabeceras efectivas de Webempresa y de la web receptora, iframe con HTTPS real, actualización sin caché intermedia, y revisión en dispositivos físicos/otros navegadores/lector de pantalla. La consulta pública revela únicamente la ocupación aprobada; conceptos y acciones de reserva permanecen dentro del acceso autenticado.
+
+## Menú de compartir simplificado
+
+66 comprobaciones de navegador público/compartir correctas. Se mantiene la generación de URL e iframe; único botón visible «Compartir», título exacto y menú con dos opciones. Comprobados contenidos copiados, confirmaciones exactas, cierre tras elegir, flechas/Inicio/Fin/Enter, Escape con devolución de foco, clic fuera, Tab, y contenido manual seleccionado para URL e iframe ante rechazo del portapapeles. Una copia posterior correcta vuelve a ocultar el contenido manual. Capturas revisadas a 1280 y 390 px; sin desbordamiento de página. Los 41 controles PHP de privacidad, solo lectura, filtros e inserción siguen pasando. No se ha cambiado la vista pública ni ninguna función de reserva.

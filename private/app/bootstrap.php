@@ -21,7 +21,7 @@ function forgetSession(): void
     session_regenerate_id(true);
     $_SESSION['csrf'] = bin2hex(random_bytes(32));
 }
-function initialize(array $config): void
+function initialize(array $config,bool $publicReadOnly=false): void
 {
     date_default_timezone_set('Europe/Madrid');
     $local = ($config['environment'] ?? '') === 'local';
@@ -29,7 +29,8 @@ function initialize(array $config): void
     if ((!$local && (($url['scheme'] ?? '') !== 'https' || !$config['secure_cookies'])) || ($local && !in_array($url['host'] ?? '', ['127.0.0.1','localhost'], true))) throw new RuntimeException('Invalid configuration');
     header('Content-Type: text/html; charset=UTF-8');
     $GLOBALS['style_nonce']=base64_encode(random_bytes(24));
-    header("Content-Security-Policy: default-src 'none'; style-src 'self' 'nonce-".$GLOBALS['style_nonce']."'; script-src 'self'; img-src 'self'; font-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'");
+    header("Content-Security-Policy: default-src 'none'; style-src 'self' 'nonce-".$GLOBALS['style_nonce']."'; script-src 'self'; img-src 'self'; font-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors ".($publicReadOnly?'*':"'none'"));
+    if (!$publicReadOnly) header('X-Frame-Options: DENY');
     header('X-Content-Type-Options: nosniff');
     header('Referrer-Policy: no-referrer');
     header('Cache-Control: no-store');
@@ -41,6 +42,7 @@ function initialize(array $config): void
             redirect(rtrim($config['app_url'],'/').'/');
         }
     }
+    if ($publicReadOnly) return; // Consulta pública sin leer ni crear sesiones.
     ini_set('session.use_strict_mode','1');
     ini_set('session.use_only_cookies','1');
     ini_set('session.use_trans_sid','0');

@@ -126,3 +126,15 @@ Revisión local: abrir http://127.0.0.1:8089/ y recargar con Ctrl+F5. Revisar ac
 Las fichas incorporan iconos SVG locales de ubicación, personas e información, con trazo común y azul corporativo. Son decorativos (texto alternativo vacío y aria-hidden); se conservan edificio, aforo, descripción y mapas. No hay dependencias externas.
 
 Al abrir la agenda sin `view`, se muestra Semana. Sin `day`, se usa la fecha actual de Europe/Madrid. Las vistas explícitas Día, Semana y Mes se respetan; Mes sigue abriendo Día al elegir una fecha. Se mantienen sala filtrada, navegación y preparación del formulario desde huecos libres.
+
+## Consulta pública e inserción
+
+Subir también `public/ocupacion.php` y los demás recursos incluidos en el paquete; no requiere migración ni credenciales nuevas. La entrada pública no inicia sesión, acepta únicamente GET/HEAD y consulta solo sala/fecha/inicio/fin mediante consultas preparadas. No carga conceptos ni datos de usuarios o identificadores de reservas.
+
+URL de producción: `https://reservasalas.metavisuals.es/ocupacion.php`. Semana y periodo actual de Europe/Madrid por defecto. Parámetros opcionales: `view=day|week|month`, `room=1|3` (en Día también `all`) y `day=AAAA-MM-DD`. Día sin sala indica ambas; al compartir se conserva el filtro de la aplicación. Sin `day`, Actualizar vuelve al periodo actual. Los enlaces generados usan `app_url` de la configuración, nunca el Host de la petición ni una dirección local fija.
+
+Para compartir, iniciar sesión y bajar al final de Ocupación de salas a «Compartir Ocupación Salas». Pulsar «Compartir» y elegir «Copiar URL» o «Copiar iframe». El menú se cierra y confirma «URL copiada» o «Código iframe copiado». No hay campos de código visibles permanentemente; solo si falla el portapapeles se muestra el contenido seleccionado para copiarlo manualmente. El menú admite flechas, Inicio/Fin, Enter/Espacio y cierre con Escape, Tab o clic fuera. El iframe tiene título accesible y ancho 100%; su altura de 1000 px se puede ajustar en la web receptora. Las vistas largas tienen desplazamiento dentro del iframe y Semana/Mes permiten desplazamiento horizontal en móviles. No hay actualización automática: Actualizar recarga los datos actuales y las respuestas llevan `Cache-Control: no-store`.
+
+Seguridad en hosting: la aplicación envía `frame-ancestors *` solamente en `ocupacion.php`. Las demás pantallas mantienen `frame-ancestors 'none'` y `X-Frame-Options: DENY`. Si Webempresa añade cabeceras globales de inserción o caché, comprobar y excluir únicamente esta entrada pública donde corresponda; no relajar las cabeceras de las pantallas autenticadas. La web receptora puede necesitar permitir el dominio en su propia política `frame-src`. Usar HTTPS en ambas webs para evitar contenido mixto.
+
+Revisión local: abrir http://127.0.0.1:8089/ocupacion.php sin sesión; cambiar Día/Semana/Mes, fechas y sala y pulsar Actualizar. Los huecos no preparan ni crean reservas. Desde la aplicación autenticada, probar los dos botones de copia y abrir el enlace en una ventana sin sesión. No se ha realizado despliegue ni enviado correo real.

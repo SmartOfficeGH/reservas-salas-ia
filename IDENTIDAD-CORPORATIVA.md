@@ -29,3 +29,7 @@ Para revisar localmente: abrir http://127.0.0.1:8089/ y recargar con Ctrl+F5. Co
 ## Iconos de las fichas
 
 Tres SVG locales en `public/icons/` (ubicación, personas e información), trazados geométricos propios de estilo común, sin librerías ni licencias externas. Trazo azul #09548A, 18 px y alineación con el comienzo del texto. Son decorativos: `alt=""` y `aria-hidden="true"`. Todas las etiquetas permanecen visibles.
+
+## Consulta pública
+
+La vista de ocupación reutiliza el logo, las fuentes y la paleta locales. Su cabecera es compacta y no incluye carrusel, fichas personales ni formulario de reserva. Disponible, Ocupado y No reservable se distinguen por texto/símbolo y trama además del color. La adaptación del calendario mantiene franjas y duraciones, también dentro de un iframe.

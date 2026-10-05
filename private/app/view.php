@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Aplicación Reserva Salas</title><link rel="stylesheet" href="estilos.css"><link rel="stylesheet" href="corporativo.css"><script src="app.js" defer></script></head>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Aplicación Reserva Salas</title><link rel="stylesheet" href="estilos.css"><link rel="stylesheet" href="corporativo.css"><script src="compartir.js" defer></script><script src="app.js" defer></script></head>
 <body>
 <header><div class="brand-heading"><img class="official-logo" src="brand/ajuntament-palma-azul.png" alt="Ajuntament de Palma" width="709" height="246"><div class="app-heading"><span class="eyebrow">RESERVA DE SALAS · PERSONAL MUNICIPAL</span><h1>Aplicación Reserva Salas</h1></div></div><?php if ($user): ?><div><span><?=h($user['email'])?></span><form method="post"><?=csrfField()?><input type="hidden" name="action" value="logout"><button class="logout-button" type="submit">Cerrar sesión</button></form></div><?php endif ?></header>
 <main>

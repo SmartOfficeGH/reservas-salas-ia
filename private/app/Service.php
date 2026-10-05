@@ -140,6 +140,12 @@ final class Service
 
     public function user(int $id): array|false { return $this->query('SELECT id,email,verified_at,auth_version FROM users WHERE id=?', [$id])->fetch(); }
     public function rooms(): array { return $this->query('SELECT * FROM rooms WHERE is_reservable=1 ORDER BY id')->fetchAll(); }
+    public function publicRooms():array { return $this->query('SELECT id,name FROM rooms WHERE is_reservable=1 ORDER BY id')->fetchAll(); }
+    public function publicPeriod(string $start,string $end):array
+    {
+        // Proyección explícita: los datos privados ni siquiera se cargan.
+        return $this->query('SELECT r.room_id,r.day,r.starts_at,r.ends_at FROM reservations r JOIN rooms s ON s.id=r.room_id WHERE r.day BETWEEN ? AND ? AND s.is_reservable=1 ORDER BY r.day,r.starts_at',[$start,$end])->fetchAll();
+    }
     public function agenda(string $day): array { return $this->query('SELECT r.* FROM reservations r JOIN rooms s ON s.id=r.room_id WHERE r.day=? AND s.is_reservable=1 ORDER BY r.starts_at', [$day])->fetchAll(); }
     public function period(string $start,string $end):array { return $this->query('SELECT r.* FROM reservations r JOIN rooms s ON s.id=r.room_id WHERE r.day BETWEEN ? AND ? AND s.is_reservable=1 ORDER BY r.day,r.starts_at',[$start,$end])->fetchAll(); }
     public function mine(int $id): array { return $this->query('SELECT r.*,s.name,s.building FROM reservations r JOIN rooms s ON s.id=r.room_id WHERE r.user_id=? ORDER BY r.day,r.starts_at', [$id])->fetchAll(); }

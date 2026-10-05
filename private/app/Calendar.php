@@ -29,6 +29,13 @@ final class Calendar
     public static function url(array $state,array $changes=[]):string
     {
         $s=array_replace($state,$changes);
-        return '?'.http_build_query(['page'=>'agenda','day'=>$s['day'],'view'=>$s['view'],'room'=>$s['room']]).'#occupation-title';
+        $query=['day'=>$s['day'],'view'=>$s['view'],'room'=>$s['room']];
+        return (!empty($s['public'])?'ocupacion.php?':'?page=agenda&').http_build_query($query).'#occupation-title';
+    }
+    public static function publicUrl(array $config,array $state,bool $includeDate):string
+    {
+        $query=['view'=>$state['view'],'room'=>$state['room']];
+        if($includeDate)$query['day']=$state['day'];
+        return rtrim($config['app_url'],'/').'/ocupacion.php?'.http_build_query($query);
     }
 }

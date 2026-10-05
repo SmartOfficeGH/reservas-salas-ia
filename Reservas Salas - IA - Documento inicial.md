@@ -111,3 +111,9 @@ Al abrir la agenda sin `view`, se muestra Semana. Sin `day`, se usa la fecha act
 ## Nombre visible
 
 El nombre mostrado en todas las pantallas, el título de las pestañas y los correos de verificación y recuperación es «Aplicación Reserva Salas». Se conservan los nombres de carpeta, repositorio y archivo de definición.
+
+## Consulta pública aprobada
+
+Además de las pantallas autenticadas, se ofrece una vista pública de solo lectura para compartir o insertar en otra web. Consulta únicamente las dos salas activas, fecha, horarios y estados Disponible, Ocupado y No reservable. No publica conceptos, nombres, correos ni identificadores de reservas, tampoco en HTML o atributos. Día, Semana (inicial) y Mes permiten navegar y filtrar; Día admite ambas salas o una y Semana/Mes muestran la sala elegida. Sin fecha explícita se muestra el periodo actual en Europe/Madrid. Actualizar vuelve a consultar el servidor. No contiene formulario de reserva ni acciones sobre huecos.
+
+Al final del calendario autenticado se añade «Compartir Ocupación Salas», con un único botón «Compartir» y un menú con «Copiar URL» y «Copiar iframe», conservando vista, sala y fecha cuando se ha elegido. Usa la URL configurada e iframe con título accesible. Tras elegir, el menú se cierra y confirma la copia. Solo si falla el portapapeles muestra el contenido seleccionado para copia manual; el menú permite teclado, Escape y clic fuera. Solo la entrada pública permite ser insertada; las pantallas autenticadas conservan sus protecciones. La creación y cancelación de reservas siguen requiriendo correo verificado y permisos existentes.

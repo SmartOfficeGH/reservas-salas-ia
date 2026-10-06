@@ -178,3 +178,29 @@ Extraer el nuevo paquete y copiar únicamente estos archivos, manteniendo sus no
 No requiere cambios SQL: no importar de nuevo las tablas ni los datos iniciales. No sobrescribir `config.php`, almacenamiento privado, reservas ni usuarios. Dependencias, imágenes, logos y mapas no cambian. El ZIP completo sirve también para instalaciones nuevas, pero esta actualización requiere solo los diez archivos anteriores. Conservar la documentación actualizada para consulta.
 
 No sustituir `.htaccess` en esta actualización: no ha cambiado. Mantener la precaución documentada arriba y comprobar que el subdominio sigue en PHP 8.4 — Personalizado. Tras una futura actualización autorizada, recargar sin caché y comprobar filtros, compartir y reserva/cancelación. Seguimos en PASO 13: revisión local previa al hosting, sin commit, push ni despliegue.
+
+## Corrección de caché de CSS/JavaScript — 6 de octubre de 2026
+
+Las pantallas autenticadas y `ocupacion.php` generan URLs `estilos.css?v=SHA256` y `corporativo.css?v=SHA256`; las autenticadas versionan también `app.js` y `compartir.js`. Cada versión se calcula sobre el contenido del archivo público real, sin depender de su fecha de modificación. Al actualizar un recurso, cambia su URL; un contenido idéntico conserva su versión. No requiere cambiar cabeceras del hosting ni .htaccess. La vista pública no necesita JavaScript.
+
+Diagnóstico de solo lectura en producción: ambos CSS y ambos JavaScript coinciden con los locales; los CSS responden 200 y `Cache-Control: max-age=31536000`. En un navegador nuevo se observaron carriles separados, reservas simultáneas en azul y turquesa, sin superposición. No se reprodujo el defecto comunicado con caché limpia; la caché antigua del navegador afectado sigue siendo una causa probable, no confirmada. Los selectores vigentes establecen position:relative por carril y colores heredados por sala, con prioridad superior a las reglas generales. No fue necesario cambiar los CSS.
+
+### Archivos exactos de esta corrección sobre la versión conjunta ya desplegada
+
+| Archivo del paquete | Destino en el servidor |
+|---|---|
+| reservas-salas-private/app/bootstrap.php | /home/delanada/reservas-salas-private/app/bootstrap.php |
+| reservas-salas-private/app/view.php | /home/delanada/reservas-salas-private/app/view.php |
+| reservas-salas-private/app/public-view.php | /home/delanada/reservas-salas-private/app/public-view.php |
+
+Solo estos tres archivos necesitan sustituirse si ya está instalada la versión conjunta d6376ac. No hay cambios de base de datos, CSS, JavaScript, dependencias ni configuración. Conservar config.php, reservas, almacenamiento privado, .htaccess y PHP 8.4 — Personalizado. El paquete es completo para instalaciones nuevas; no copiar todo encima de una instalación existente.
+
+Revisión local: abrir http://127.0.0.1:8089/ocupacion.php y la agenda autenticada. Comprobar en el código HTML o en Red que todos los CSS/JavaScript tienen `?v=` seguido del hash y responden 200. Cambiar vistas/filtros y revisar en Semana dos carriles por día, nombres separados y colores distintos; en Día columnas por sala. Las reservas simultáneas y parcialmente coincidentes deben conservar las alturas reales, sin taparse.
+
+En futuras actualizaciones, comprobar también la carga de las URLs versionadas en el navegador afectado y revisar las reservas simultáneas; no dar por solucionado un problema únicamente porque aparece `?v=`.
+
+## Resultado de la validación en Webempresa
+
+Validación manual comunicada por el usuario el 6 de octubre de 2026: la corrección de caché está desplegada en Webempresa y las salas se muestran separadas, con colores distintos y sin superposición. La vista pública conserva la privacidad y no permite reservar. Esta validación en el hosting la realizó el usuario; el agente no efectuó cambios en el servidor.
+
+El primer correo de verificación tardó aproximadamente tres minutos en llegar. El envío y la verificación mediante el enlace funcionaron. No se ha determinado la causa del retraso; esta observación no establece un tiempo de entrega garantizado ni demuestra que el retraso proceda de Gmail, Webempresa o el buzón receptor.

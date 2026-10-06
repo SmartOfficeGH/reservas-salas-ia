@@ -5,6 +5,15 @@ require_once __DIR__.'/Occupancy.php';
 require_once __DIR__.'/Calendar.php';
 
 function h(mixed $value): string { return htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); }
+function assetUrl(string $name): string
+{
+    if (!in_array($name,['estilos.css','corporativo.css','app.js','compartir.js'],true)) throw new RuntimeException('Unknown asset');
+    // La entrada PHP está en la carpeta pública tanto en local como en Webempresa.
+    $path=dirname($_SERVER['SCRIPT_FILENAME']).DIRECTORY_SEPARATOR.$name;
+    $hash=is_file($path)?hash_file('sha256',$path):false;
+    if ($hash===false) throw new RuntimeException('Missing public asset');
+    return $name.'?v='.$hash;
+}
 function redirect(string $path): never { header('Location: '.$path, true, 303); exit; }
 function csrfField(): string { return '<input type="hidden" name="csrf" value="'.h($_SESSION['csrf']).'">'; }
 function checkCsrf(): void

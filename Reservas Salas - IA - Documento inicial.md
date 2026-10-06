@@ -88,7 +88,7 @@ La primera versión tendrá tres pantallas:
 
 - Límites de duración y antelación máxima de las reservas. No se exige antelación mínima de 24 horas y se permite reservar para el mismo día.
 - Confirmar la versión del servidor MySQL y validar la conexión real y el envío SMTP durante el despliegue. Soporte de Webempresa ha confirmado MySQL en localhost:3306 y salida a smtp.gmail.com:587 con STARTTLS; aún no se han probado las conexiones reales.
-- Validar la entrega de los correos en buzones palma.es y ejecutar las comprobaciones finales en Webempresa.
+- Ampliar las comprobaciones de entrega en buzones palma.es y los demás recorridos en Webempresa. El primer envío y verificación funcionaron según la validación manual comunicada por el usuario; la causa de su retraso aproximado de tres minutos queda sin determinar.
 
 ## 4. Posibles mejoras para versiones posteriores
 
@@ -121,3 +121,13 @@ Al final del calendario autenticado se añade «Compartir Ocupación Salas», co
 ## Consulta conjunta — PASO 13 (6 de octubre de 2026)
 
 Los enlaces e iframe conservan `room=0` para Todas las salas, además de vista y fecha explícita. Semana sigue siendo inicial y sin fecha se utiliza el periodo actual de Europe/Madrid. La consulta previa de disponibilidad no guarda reservas ni sustituye las validaciones transaccionales al confirmar. La vista pública permanece de solo lectura y no carga conceptos, usuarios ni identificadores de reservas. No requiere cambios de base de datos.
+
+## Recursos y actualización de estilos
+
+Los CSS y JavaScript públicos utilizan URLs versionadas mediante SHA-256 del contenido en las pantallas autenticadas y en la consulta pública. Se evita reutilizar una versión antigua tras sustituir recursos, conservando las políticas de seguridad y las reglas de reserva. Este ajuste técnico no cambia datos ni funcionalidades.
+
+## Resultado comunicado tras el despliegue
+
+Validación manual comunicada por el usuario el 6 de octubre de 2026: la corrección de caché está desplegada en Webempresa y las salas se muestran separadas, con colores distintos y sin superposición. La vista pública conserva la privacidad y no permite reservar. Esta validación en el hosting la realizó el usuario; el agente no efectuó cambios en el servidor.
+
+El primer correo de verificación tardó aproximadamente tres minutos en llegar. El envío y la verificación mediante el enlace funcionaron. No se ha determinado la causa del retraso; esta observación no establece un tiempo de entrega garantizado ni demuestra que el retraso proceda de Gmail, Webempresa o el buzón receptor.

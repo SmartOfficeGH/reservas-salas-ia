@@ -117,3 +117,20 @@ Pendiente en hosting: comprobar cabeceras efectivas de Webempresa y de la web re
 - Revisadas capturas en escritorio y móvil: orden de página conservado, colores/leyenda legibles, formulario accesible y desplazamiento horizontal dentro del calendario, sin desbordamiento de página. La política de seguridad permite únicamente consultas de disponibilidad al propio origen en pantallas autenticadas; la vista pública mantiene connect-src none.
 
 Pendiente de revisión: teléfonos físicos, otros navegadores y lector de pantalla; revisión local por el usuario y posterior actualización autorizada del hosting. No hay cambios de esquema ni datos de producción. Mantener PHP 8.4 y el .htaccess actual según INSTALACION.md.
+
+## Versionado de recursos y diagnóstico de caché
+
+- Lectura del hosting: estilos.css y corporativo.css idénticos byte a byte a los locales, con caché de un año; app.js y compartir.js también idénticos y HTTP 200. Navegador limpio muestra dos carriles por día y dos reservas reales simultáneas con colores diferentes. No se alteraron reservas, sesiones del usuario, credenciales ni servidor.
+- `php tests/assets.php`: 14 controles de SHA-256 estable para contenido idéntico, cambio de URL al cambiar el contenido, rechazo de nombres fuera de la lista y archivos ausentes. Utiliza archivos temporales propios, eliminados al terminar.
+- `php tests/joint.php`: 9 controles de servidor y 127 controles de navegador. Comprueba hash exacto de cada CSS/JavaScript en las dos entradas, HTTP 200 y simulación de estilos antiguos en URLs sin versión: las páginas no las solicitan. Comprueba prioridades efectivas, carriles posicionados, separación de cabeceras, geometría de reservas simultáneas/parcialmente coincidentes, colores diferentes, filtros, tres vistas, teclado y privacidad. Capturas de 1280 y 390 px revisadas visualmente, con desplazamiento hasta el día de las reservas sintéticas.
+- Repetidas 41 comprobaciones públicas y 66 de navegador de privacidad/compartir/iframe; 57 del recorrido HTTP con correo simulado. Sin cambios de negocio ni SQL.
+- Repetidas las 83 comprobaciones de identidad corporativa y pantallas en Edge; la prueba espera explícitamente la carga de iconos y estilos antes de medirlos.
+- En el diagnóstico inicial no se reprodujo el fallo con caché limpia. La posterior validación manual en Webempresa está registrada a continuación. Sigue pendiente una revisión más amplia con dispositivos físicos, otros navegadores y lector de pantalla.
+
+## Validación manual en producción comunicada por el usuario
+
+Validación manual comunicada por el usuario el 6 de octubre de 2026: la corrección de caché está desplegada en Webempresa y las salas se muestran separadas, con colores distintos y sin superposición. La vista pública conserva la privacidad y no permite reservar. Esta validación en el hosting la realizó el usuario; el agente no efectuó cambios en el servidor.
+
+El primer correo de verificación tardó aproximadamente tres minutos en llegar. El envío y la verificación mediante el enlace funcionaron. No se ha determinado la causa del retraso; esta observación no establece un tiempo de entrega garantizado ni demuestra que el retraso proceda de Gmail, Webempresa o el buzón receptor.
+
+No se han enviado correos ni modificado el hosting para registrar este resultado. La prueba satisfactoria corresponde a ese primer recorrido de verificación; no acredita por sí sola todas las modalidades de correo o todos los buzones.

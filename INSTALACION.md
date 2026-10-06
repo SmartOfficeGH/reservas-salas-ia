@@ -106,9 +106,9 @@ La página conserva el carrusel y sigue este orden: fichas de las salas, formula
 
 - Semana es la vista inicial si no se indica otra vista, con la semana de la fecha actual en Europe/Madrid. Día muestra: ambas salas en columnas, 07:00–16:00 y franjas de 30 minutos.
 - Semana muestra lunes a viernes con un filtro de sala. Los huecos libres preparan la sala, fecha y hora en el formulario superior.
-- Mes presenta un resumen por día (número de reservas y minutos ocupados) de la sala filtrada. Pulsar una fecha abre Día para elegir una hora; no hay franjas dentro de las casillas mensuales.
+- Mes presenta un resumen por día (número de reservas y minutos ocupados) identificado por sala, conjunto o de la sala filtrada. Pulsar una fecha abre Día para elegir una hora; no hay franjas dentro de las casillas mensuales.
 - Anterior, Siguiente y Hoy conservan la vista y la sala elegida. La fecha y el filtro están en la URL y los controles. Las fechas de fin de mes se ajustan al último día válido al avanzar o retroceder; por ejemplo, 31 de enero pasa a 28/29 de febrero.
-- Al cambiar el filtro, el formulario toma esa sala como selección inicial. Al confirmar una reserva, el calendario conserva su vista y se sitúa en la fecha y sala reservadas.
+- Al elegir una sala concreta en el filtro, el formulario toma esa sala como selección inicial. Todas las salas deja la sala sin seleccionar. Al confirmar una reserva, el calendario conserva vista y filtro y se sitúa en la fecha reservada.
 
 Para revisar: recargar con Ctrl+F5, comprobar el orden, alternar vistas, filtrar ambas salas, avanzar de diciembre a enero y de enero a febrero, usar Hoy y abrir un día desde Mes. Pulsar un hueco en Día y otro en Semana: el formulario debe quedar preparado, enfocado y permitir ajustar los datos antes de confirmar. En móvil, los periodos anchos permiten desplazamiento horizontal con foco de teclado; los controles y el formulario se adaptan al ancho.
 
@@ -131,10 +131,50 @@ Al abrir la agenda sin `view`, se muestra Semana. Sin `day`, se usa la fecha act
 
 Subir también `public/ocupacion.php` y los demás recursos incluidos en el paquete; no requiere migración ni credenciales nuevas. La entrada pública no inicia sesión, acepta únicamente GET/HEAD y consulta solo sala/fecha/inicio/fin mediante consultas preparadas. No carga conceptos ni datos de usuarios o identificadores de reservas.
 
-URL de producción: `https://reservasalas.metavisuals.es/ocupacion.php`. Semana y periodo actual de Europe/Madrid por defecto. Parámetros opcionales: `view=day|week|month`, `room=1|3` (en Día también `all`) y `day=AAAA-MM-DD`. Día sin sala indica ambas; al compartir se conserva el filtro de la aplicación. Sin `day`, Actualizar vuelve al periodo actual. Los enlaces generados usan `app_url` de la configuración, nunca el Host de la petición ni una dirección local fija.
+URL de producción: `https://reservasalas.metavisuals.es/ocupacion.php`. Semana y periodo actual de Europe/Madrid por defecto. Parámetros opcionales: `view=day|week|month`, `room=0|1|3` (0 = Todas las salas; inicial en las tres vistas) y `day=AAAA-MM-DD`. Sin sala indicada se muestran ambas en todas las vistas; al compartir se conserva el filtro de la aplicación. Sin `day`, Actualizar vuelve al periodo actual. Los enlaces generados usan `app_url` de la configuración, nunca el Host de la petición ni una dirección local fija.
 
 Para compartir, iniciar sesión y bajar al final de Ocupación de salas a «Compartir Ocupación Salas». Pulsar «Compartir» y elegir «Copiar URL» o «Copiar iframe». El menú se cierra y confirma «URL copiada» o «Código iframe copiado». No hay campos de código visibles permanentemente; solo si falla el portapapeles se muestra el contenido seleccionado para copiarlo manualmente. El menú admite flechas, Inicio/Fin, Enter/Espacio y cierre con Escape, Tab o clic fuera. El iframe tiene título accesible y ancho 100%; su altura de 1000 px se puede ajustar en la web receptora. Las vistas largas tienen desplazamiento dentro del iframe y Semana/Mes permiten desplazamiento horizontal en móviles. No hay actualización automática: Actualizar recarga los datos actuales y las respuestas llevan `Cache-Control: no-store`.
 
 Seguridad en hosting: la aplicación envía `frame-ancestors *` solamente en `ocupacion.php`. Las demás pantallas mantienen `frame-ancestors 'none'` y `X-Frame-Options: DENY`. Si Webempresa añade cabeceras globales de inserción o caché, comprobar y excluir únicamente esta entrada pública donde corresponda; no relajar las cabeceras de las pantallas autenticadas. La web receptora puede necesitar permitir el dominio en su propia política `frame-src`. Usar HTTPS en ambas webs para evitar contenido mixto.
 
 Revisión local: abrir http://127.0.0.1:8089/ocupacion.php sin sesión; cambiar Día/Semana/Mes, fechas y sala y pulsar Actualizar. Los huecos no preparan ni crean reservas. Desde la aplicación autenticada, probar los dos botones de copia y abrir el enlace en una ventana sin sesión. No se ha realizado despliegue ni enviado correo real.
+
+## Precaución en futuras versiones: PHP y .htaccess de Webempresa
+
+Incidencia observada el 6 de octubre de 2026: tras sustituir el archivo .htaccess del subdominio por el del paquete, wePanel volvió a mostrar PHP 7.0 — Heredado. Se restableció PHP 8.4 — Personalizado únicamente para reservasalas.metavisuals.es. La sustitución probablemente eliminó las directivas de selección de PHP añadidas por el hosting.
+
+En cada instalación o actualización:
+1. Conservar una copia del .htaccess existente antes de reemplazarlo.
+2. Revisar e integrar las directivas específicas de PHP del hosting con las reglas de la aplicación; no copiar una directiva supuesta ni reemplazar a ciegas el archivo.
+3. Después de copiar los archivos, comprobar en wePanel → Versiones PHP que reservasalas.metavisuals.es mantiene 8.4 — Personalizado.
+4. Si aparece Heredado u otra versión, seleccionar de nuevo 8.4 solo para ese subdominio. No cambiar la versión general del hosting.
+5. Comprobar que siguen presentes las reglas de seguridad de la aplicación en .htaccess y validar el funcionamiento antes de dar la actualización por terminada.
+
+La configuración PHP del hosting es específica del servidor. El paquete distribuido no garantiza conservarla al sobrescribir .htaccess. Esta comprobación debe incluirse siempre en la lista de despliegue. La documentación de un paquete ZIP ya generado no se actualiza automáticamente cuando cambia este archivo: regenerar el paquete antes de una futura entrega.
+
+## Actualización de consulta conjunta — PASO 13
+
+Revisión local: recargar con Ctrl+F5 y abrir `http://127.0.0.1:8089/?page=agenda` y `http://127.0.0.1:8089/ocupacion.php`. Semana y Todas las salas son iniciales. Alternar Día/Semana/Mes y filtrar una sala. Los carriles semanales separan reservas simultáneas y parcialmente coincidentes; sus posiciones y alturas mantienen las horas reales. La leyenda y los nombres acompañan al color. En móvil desplazar horizontalmente el calendario, sin desplazar toda la página.
+
+Con Todas las salas, un hueco prepara fecha e inicio pero deja sala y fin pendientes. Elegir una sala consulta su disponibilidad: propone 30 minutos solo si caben; si está ocupada avisa. Ajustar las horas y confirmar es obligatorio. Con una sala concreta, el hueco conserva la preparación directa. La comprobación previa no garantiza disponibilidad futura; al confirmar se mantienen las transacciones y el bloqueo de solapamientos por sala. La consulta pública no permite esta interacción y no publica conceptos ni datos personales. Copiar URL/iframe conserva `room=0`, vista y fecha explícita.
+
+### Archivos exactos para actualizar una instalación existente
+
+Extraer el nuevo paquete y copiar únicamente estos archivos, manteniendo sus nombres. No se autoriza la subida todavía.
+
+| Archivo del paquete | Destino en el servidor |
+|---|---|
+| public/app.js | /home/delanada/public_html/reservasalas.metavisuals.es/app.js |
+| public/corporativo.css | /home/delanada/public_html/reservasalas.metavisuals.es/corporativo.css |
+| public/index.php | /home/delanada/public_html/reservasalas.metavisuals.es/index.php |
+| public/ocupacion.php | /home/delanada/public_html/reservasalas.metavisuals.es/ocupacion.php |
+| reservas-salas-private/app/bootstrap.php | /home/delanada/reservas-salas-private/app/bootstrap.php |
+| reservas-salas-private/app/Calendar.php | /home/delanada/reservas-salas-private/app/Calendar.php |
+| reservas-salas-private/app/Service.php | /home/delanada/reservas-salas-private/app/Service.php |
+| reservas-salas-private/app/availability.php (nuevo) | /home/delanada/reservas-salas-private/app/availability.php |
+| reservas-salas-private/app/occupancy-view.php | /home/delanada/reservas-salas-private/app/occupancy-view.php |
+| reservas-salas-private/app/view.php | /home/delanada/reservas-salas-private/app/view.php |
+
+No requiere cambios SQL: no importar de nuevo las tablas ni los datos iniciales. No sobrescribir `config.php`, almacenamiento privado, reservas ni usuarios. Dependencias, imágenes, logos y mapas no cambian. El ZIP completo sirve también para instalaciones nuevas, pero esta actualización requiere solo los diez archivos anteriores. Conservar la documentación actualizada para consulta.
+
+No sustituir `.htaccess` en esta actualización: no ha cambiado. Mantener la precaución documentada arriba y comprobar que el subdominio sigue en PHP 8.4 — Personalizado. Tras una futura actualización autorizada, recargar sin caché y comprobar filtros, compartir y reserva/cancelación. Seguimos en PASO 13: revisión local previa al hosting, sin commit, push ni despliegue.

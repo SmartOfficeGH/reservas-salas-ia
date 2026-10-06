@@ -15,7 +15,6 @@ try {
     $view=is_string($_GET['view']??null)?$_GET['view']:'week';
     $rawRoom=is_string($_GET['room']??null)?$_GET['room']:'';
     $cal=Calendar::state($day,$view,(int)$rawRoom);
-    if($cal['view']==='day'&&($rawRoom===''||$rawRoom==='all'))$cal['room']='all';
     $cal['public']=true;$day=$cal['day'];$isPublic=true;
     $service=new Service(Service::connect($config),static function():void{throw new RuntimeException('Read only');});
     $rooms=$service->publicRooms();$agenda=$service->publicPeriod($cal['start'],$cal['end']);

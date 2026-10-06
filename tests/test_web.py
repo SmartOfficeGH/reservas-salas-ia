@@ -61,7 +61,7 @@ check('Ocupación de salas</h2>' in body and body.count('class="occupation-colum
 check(body.index('Salas y disponibilidad</h2>')<body.index('Nueva reserva</h2>')<body.index('Ocupación de salas</h2>')<body.index('Normativa de uso</h2>'),'approved page order')
 today=datetime.now(ZoneInfo("Europe/Madrid")).date()
 check(f'name="day" value="{today}"' in body and 'value="week"' in body,'initial current Madrid week')
-for explicit,columns in [('day',2),('week',5),('month',0)]:
+for explicit,columns in [('day',1),('week',5),('month',0)]:
     _,selected,_,_=c.request(f'?page=agenda&view={explicit}&room=3')
     check(selected.count('class="occupation-column"')==columns and f'view={explicit}&amp;room=3' in selected,'explicit view and filter '+explicit)
 check(body.count('class="detail-icon"')==6 and body.count('alt="" aria-hidden="true"')==6,'decorative room icons preserve labels')

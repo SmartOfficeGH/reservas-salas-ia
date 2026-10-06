@@ -7,3 +7,5 @@ button.dataset.end='';button.click();assert.equal(fields['booking-end'].value,''
 button.disabled=true;fields['booking-start'].value='unchanged';button.click();assert.equal(fields['booking-start'].value,'unchanged');
 button.disabled=false;button.dataset.startAt='2020-01-01T09:00:00+01:00';button.click();assert.equal(fields['booking-start'].value,'unchanged');assert.equal(button.disabled,true);assert.ok(fields['slot-message'].textContent.includes('ya ha pasado'));
 console.log('SLOTS: formulario preparado sin guardar, propuesta condicional, foco, pasado y franjas deshabilitadas comprobados.');
+
+button.disabled=false;button.dataset.startAt="2099-10-05T09:00:00+02:00";button.dataset.roomId="0";button.dataset.end="";button.click();assert.equal(fields.room_id.value,"");assert.equal(fields["booking-end"].value,"");assert.equal(fields.room_id.focused,true);assert.ok(fields["slot-message"].textContent.includes("otras salas pueden estar ocupadas"));

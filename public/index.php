@@ -13,7 +13,7 @@ if (!is_file($private.'/config.php')) {
 require $private.'/app/bootstrap.php';
 $error = ''; $user = false;
 $page = is_string($_GET['page'] ?? null) ? $_GET['page'] : 'agenda';
-$pages = ['agenda','mine','login','register','forgot','resend','verify','reset'];
+$pages = ['agenda','mine','login','register','forgot','resend','verify','reset','availability'];
 if (!in_array($page,$pages,true)) $page='agenda';
 try {
     $config = require $private.'/config.php';
@@ -29,6 +29,7 @@ try {
         $user = $service->user((int)$_SESSION['uid']);
         if (!$user || !$user['verified_at'] || (int)$user['auth_version'] !== (int)($_SESSION['version'] ?? 0)) { forgetSession(); $user=false; }
     }
+    if($page==='availability')require $private.'/app/availability.php';
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         checkCsrf();
         $action = input('action');
@@ -68,7 +69,8 @@ try {
                     $service->book((int)$user['id'],['room_id'=>(int)input('room_id'),'concept'=>input('concept'),'day'=>input('day'),'start'=>input('start'),'end'=>input('end')]);
                     $_SESSION['flash']='Reserva confirmada. Puedes consultarla en Mis reservas.';
                     $returnView=in_array(input('calendar_view'),['day','week','month'],true)?input('calendar_view'):'week';
-                    redirect('?page=agenda&day='.urlencode(input('day')).'&view='.$returnView.'&room='.(int)input('room_id'));
+                    $returnRoom=in_array(input('calendar_room'),['0','1','3'],true)?input('calendar_room'):input('room_id');
+                    redirect('?page=agenda&day='.urlencode(input('day')).'&view='.$returnView.'&room='.(int)$returnRoom);
                 }
                 $service->cancel((int)$user['id'],(int)input('reservation_id'));
                 $_SESSION['flash']='Reserva cancelada. El horario vuelve a estar disponible.';
@@ -93,7 +95,7 @@ $day = is_string($_GET['day'] ?? null) ? $_GET['day'] : (new DateTimeImmutable('
 $date = DateTimeImmutable::createFromFormat('!Y-m-d',$day);
 if (!$date || $date->format('Y-m-d') !== $day) $day=date('Y-m-d');
 $rooms=[]; $agenda=[]; $mine=[];
-$cal=Calendar::state($day,is_string($_GET['view']??null)?$_GET['view']:'week',(int)(is_scalar($_GET['room']??null)?$_GET['room']:1));
+$cal=Calendar::state($day,is_string($_GET['view']??null)?$_GET['view']:'week',(int)(is_scalar($_GET['room']??null)?$_GET['room']:0));
 try {
     if ($user) { $rooms=$service->rooms(); if ($page==='agenda') $agenda=$service->period($cal['start'],$cal['end']); if ($page==='mine') $mine=$service->mine((int)$user['id']); }
 } catch (Throwable $e) { http_response_code(503); $error='No se pueden consultar las reservas en este momento.'; }

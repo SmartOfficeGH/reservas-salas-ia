@@ -53,7 +53,7 @@ const {chromium}=require('playwright');
     const messages=fs.readdirSync('private/storage/test-mail').map(n=>({n,t:fs.statSync('private/storage/test-mail/'+n).mtimeMs})).sort((a,b)=>b.t-a.t).map(x=>JSON.parse(fs.readFileSync('private/storage/test-mail/'+x.n,'utf8')));
     const account=messages.find(x=>x.email.startsWith('http.other.')&&x.kind==='verify');
     await page.goto(base+'?page=login');await page.locator('[name=email]').fill(account.email);await page.locator('[name=password]').fill('Contraseña ficticia larga');await page.getByRole('button',{name:'Iniciar sesión',exact:true}).click();
-    const implicit=await page.locator('#public-link').inputValue();check(implicit===base+'ocupacion.php?view=week&room=1','implicit date omitted');
+    const implicit=await page.locator('#public-link').inputValue();check(implicit===base+'ocupacion.php?view=week&room=0','implicit date omitted');
     await page.goto(base+'?page=agenda&view=month&room=3&day='+day);
     const link=await page.locator('#public-link').inputValue();const iframe=await page.locator('#public-iframe').inputValue();
     check(link===base+'ocupacion.php?view=month&room=3&day='+day,'explicit state shared');

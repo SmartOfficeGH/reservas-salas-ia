@@ -29,7 +29,7 @@ function initialize(array $config,bool $publicReadOnly=false): void
     if ((!$local && (($url['scheme'] ?? '') !== 'https' || !$config['secure_cookies'])) || ($local && !in_array($url['host'] ?? '', ['127.0.0.1','localhost'], true))) throw new RuntimeException('Invalid configuration');
     header('Content-Type: text/html; charset=UTF-8');
     $GLOBALS['style_nonce']=base64_encode(random_bytes(24));
-    header("Content-Security-Policy: default-src 'none'; style-src 'self' 'nonce-".$GLOBALS['style_nonce']."'; script-src 'self'; img-src 'self'; font-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors ".($publicReadOnly?'*':"'none'"));
+    header("Content-Security-Policy: default-src 'none'; style-src 'self' 'nonce-".$GLOBALS['style_nonce']."'; script-src 'self'; img-src 'self'; font-src 'self'; connect-src ".($publicReadOnly?"'none'":"'self'")."; form-action 'self'; base-uri 'none'; frame-ancestors ".($publicReadOnly?'*':"'none'"));
     if (!$publicReadOnly) header('X-Frame-Options: DENY');
     header('X-Content-Type-Options: nosniff');
     header('Referrer-Policy: no-referrer');

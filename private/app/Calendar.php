@@ -2,13 +2,13 @@
 declare(strict_types=1);
 final class Calendar
 {
-    public static function state(string $day,string $view='week',int $room=1):array
+    public static function state(string $day,string $view='week',int $room=0):array
     {
         $zone=new DateTimeZone('Europe/Madrid');
         $date=DateTimeImmutable::createFromFormat('!Y-m-d',$day,$zone);
         if(!$date||$date->format('Y-m-d')!==$day)$date=new DateTimeImmutable('today',$zone);
         if(!in_array($view,['day','week','month'],true))$view='week';
-        if(!in_array($room,[1,3],true))$room=1;
+        if(!in_array($room,[0,1,3],true))$room=0;
         $days=[];
         if($view==='week') {
             $start=$date->modify('-'.((int)$date->format('N')-1).' days');$end=$start->modify('+4 days');

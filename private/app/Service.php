@@ -141,6 +141,24 @@ final class Service
     public function user(int $id): array|false { return $this->query('SELECT id,email,verified_at,auth_version FROM users WHERE id=?', [$id])->fetch(); }
     public function rooms(): array { return $this->query('SELECT * FROM rooms WHERE is_reservable=1 ORDER BY id')->fetchAll(); }
     public function publicRooms():array { return $this->query('SELECT id,name FROM rooms WHERE is_reservable=1 ORDER BY id')->fetchAll(); }
+    public function availability(int $room,string $day,string $start,string $end=''):array
+    {
+        if(!preg_match('/^\d{2}:\d{2}$/',$start))throw new UserError('Indica una hora válida.');
+        $minute=Occupancy::minute($start);
+        $validationEnd=$end?:Occupancy::clock($minute+1);
+        self::validateBooking(['concept'=>'Consulta de disponibilidad','day'=>$day,'start'=>$start,'end'=>$validationEnd]);
+        if(!$this->query('SELECT id FROM rooms WHERE id=? AND is_reservable=1',[$room])->fetch())throw new UserError('Elige una sala reservable.');
+        $events=$this->query('SELECT starts_at,ends_at FROM reservations WHERE room_id=? AND day=? ORDER BY starts_at',[$room,$day])->fetchAll();
+        $until=960;
+        foreach($events as $event) {
+            $a=Occupancy::minute($event['starts_at']);$b=Occupancy::minute($event['ends_at']);
+            if($minute>=$a&&$minute<$b)return ['available'=>false,'proposed_end'=>'','message'=>'Esta sala está ocupada a esa hora. Elige otra sala u otro horario.'];
+            if($a>=$minute)$until=min($until,$a);
+        }
+        $available=$end===''||Occupancy::minute($end)<=$until;
+        return ['available'=>$available,'proposed_end'=>$minute+30<=$until?Occupancy::clock($minute+30):'',
+            'message'=>$available?'Disponibilidad consultada. Confirma la reserva para guardarla.':'Esta sala está ocupada en parte del horario elegido.'];
+    }
     public function publicPeriod(string $start,string $end):array
     {
         // Proyección explícita: los datos privados ni siquiera se cargan.

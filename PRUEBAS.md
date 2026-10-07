@@ -151,8 +151,40 @@ Estado: primer despliegue funcional validado manualmente en Webempresa, según l
 
 Las conexiones reales de la aplicación a MySQL y el envío/recepción de los correos de verificación y recuperación quedan comprobados funcionalmente. No equivalen a una auditoría independiente de TLS, permisos de archivos o de todas las políticas de seguridad.
 
-Pendiente de comprobar o documentar: permisos efectivos de config.php y carpetas privadas; existencia, frecuencia y retención de copias; restauración real de archivos y base de datos; versión exacta de MySQL y revisión menor de PHP; auditoría de TLS/cabeceras y controles de seguridad en producción más allá de estos recorridos; revisión ampliada de dispositivos, navegadores y accesibilidad. No se dan por verificadas estas medidas.
+Comprobado posteriormente en PASO 14: config.php con permiso 600 y acceso/agenda funcionales; disponibilidad de una copia de archivos y base en SuperBackup. Pendiente: permisos del resto de archivos y carpetas privadas; frecuencia y retención de copias; recuperación completa de archivos y aplicación en un entorno separado (la base de datos ya se restauró localmente); versión exacta de MySQL y revisión menor de PHP; auditoría de TLS/cabeceras y controles de seguridad en producción más allá de los recorridos comunicados; revisión ampliada de dispositivos, navegadores y accesibilidad. No se dan por verificadas estas medidas pendientes.
 
 El retraso de verificación no establece un plazo garantizado ni identifica como responsable a Gmail, Webempresa o el buzón receptor. No se han guardado correos de usuarios, enlaces de verificación, credenciales ni datos de reservas en este registro.
 
 Guía para futuras operaciones: MANTENIMIENTO.md. Las secciones de instalación siguientes son instrucciones de referencia para instalaciones nuevas, no acciones pendientes sobre esta instalación ya validada.
+
+## Seguimiento del PASO 14 — 7 de octubre de 2026
+
+Comprobaciones manuales comunicadas por el usuario; se registran sin acceder al servidor ni examinar las copias:
+
+- El permiso de `/home/delanada/reservas-salas-private/config.php` se cambió de 644 a 600. Después del cambio, el inicio de sesión y la consulta de la agenda funcionaron correctamente. No se ha revisado por ello el resto de permisos de archivos o carpetas privadas.
+- En SuperBackup se comprobó que la copia del 7 de octubre de 2026 a las 02:21 incluye la base `delanada_reservas_sala`; `/home/delanada/reservas-salas-private` con app, vendor, config.php y storage; y `/home/delanada/public_html/reservasalas.metavisuals.es`, incluidos recursos públicos y .htaccess. Se ha comprobado la disponibilidad y los elementos mostrados por SuperBackup, no su integridad mediante restauración.
+- El usuario descargó en su ordenador `2026-10-07-delanada_reservas_sala.tar.gz`. En ese momento no se había inspeccionado el contenido del archivo descargado; posteriormente se comprobó mediante la restauración local descrita a continuación. La descarga registrada corresponde a ese archivo de base de datos; no acredita la descarga local de las carpetas públicas y privadas.
+
+Estado actualizado: la copia de base de datos se ha leído e importado correctamente en una base local aislada; resultados y limpieza en la sección de recuperación siguiente. Pendiente: recuperar la aplicación completa con sus archivos y base compatible en un entorno separado y protegido, sin afectar a producción ni enviar correos reales. Frecuencia, retención y permisos del resto de archivos siguen pendientes de revisión; la existencia de esta copia no los acredita.
+
+Las copias pueden contener credenciales y datos personales: mantenerlas fuera de Git y fuera de la carpeta pública. En este registro se incluye únicamente el nombre del archivo, nunca su contenido. No se han realizado cambios en el servidor, restauraciones ni descargas adicionales para redactar esta actualización.
+
+## Recuperación local de la base de datos — PASO 14, 7 de octubre de 2026
+
+Prueba realizada con `2026-10-07-delanada_reservas_sala.tar.gz`, conservando intacta la copia original descargada. El usuario había inspeccionado manualmente el SQL; en esta prueba se comprobó además la lectura del gzip/tar y la importación efectiva del único SQL regular, delanada_reservas_sala.sql. No se incluyen su contenido ni datos privados en la documentación.
+
+Se extrajo en una carpeta temporal fuera de OneDrive y del repositorio. Se utilizó MariaDB portable 11.4.9 ya disponible, en una instancia nueva con datos propios y puerto temporal, limitada a 127.0.0.1. No se instalaron herramientas ni se cambiaron servicios. La base de restauración fue nueva e independiente. No se cargó configuración de la aplicación ni se usó la base local habitual o producción. Se omitió únicamente la instrucción USE de la base de origen para importar en el nombre temporal; el esquema y los datos se importaron sin modificarlos. El usuario de importación quedó limitado a esa base, sin privilegios globales o de archivos. El programador de eventos estaba desactivado y no se inició la aplicación ni se enviaron correos.
+
+| Tabla recuperada | Filas |
+|---|---:|
+| users | 1 |
+| rooms | 2 |
+| reservations | 1 |
+| email_tokens | 0 |
+| rate_limits | 6 |
+
+Resultado: cinco tablas InnoDB recuperadas; cantidades coincidentes con las filas de los INSERT del SQL; tres claves foráneas previstas (tokens a usuarios y reservas a usuarios/salas), sin registros huérfanos. La restricción CHECK de horarios está presente y CHECK TABLE devolvió OK para las cinco tablas. No se mostraron correos, hashes de contraseña, tokens ni conceptos.
+
+Limpieza completada y comprobada: eliminación de la base creada, parada de la instancia temporal y eliminación de toda su carpeta temporal, incluido el SQL extraído y los datos del motor. El SHA-256 de la copia original coincide antes y después; no se publicó su contenido. Los elementos ajenos al proyecto se conservaron. No hubo commit, push ni cambios en el servidor.
+
+Alcance: recuperabilidad de esta copia de base de datos comprobada en MariaDB 11.4.9 local. No equivale a restaurar la aplicación completa ni a probar el mismo motor/versión del hosting. Sigue pendiente ensayar en un entorno separado y protegido la recuperación conjunta de archivos públicos y privados, dependencias, configuración, storage y .htaccess, con base compatible y pruebas funcionales, sin afectar a producción ni enviar correos. Tampoco acredita la frecuencia/retención de copias, todas las políticas del hosting ni la integridad de copias de archivos aún no restauradas.

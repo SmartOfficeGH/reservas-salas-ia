@@ -134,3 +134,25 @@ Validación manual comunicada por el usuario el 6 de octubre de 2026: la correcc
 El primer correo de verificación tardó aproximadamente tres minutos en llegar. El envío y la verificación mediante el enlace funcionaron. No se ha determinado la causa del retraso; esta observación no establece un tiempo de entrega garantizado ni demuestra que el retraso proceda de Gmail, Webempresa o el buzón receptor.
 
 No se han enviado correos ni modificado el hosting para registrar este resultado. La prueba satisfactoria corresponde a ese primer recorrido de verificación; no acredita por sí sola todas las modalidades de correo o todos los buzones.
+
+## Cierre del primer despliegue — 7 de octubre de 2026
+
+Estado: primer despliegue funcional validado manualmente en Webempresa, según las comprobaciones comunicadas por el usuario. El agente documenta los resultados; no ha realizado estas operaciones en el servidor.
+
+| Comprobación en hosting | Resultado comunicado |
+|---|---|
+| Registro, recepción del correo y verificación | Correctos. El primer correo tardó aproximadamente tres minutos; causa del retraso no determinada. |
+| Inicio de sesión y recuperación de contraseña | Correctos; el correo de recuperación llegó rápidamente, sin medición exacta comunicada. |
+| Persistencia de reservas y cancelación | Funcionamiento comprobado. |
+| Usuario MySQL de la aplicación | Limitado a SELECT, INSERT, UPDATE y DELETE; funcionamiento comprobado con esos privilegios. |
+| Ocupación conjunta | Colores diferenciados y carriles separados, sin superposición. |
+| Consulta pública | Sin conceptos ni datos personales y sin posibilidad de reservar. |
+| Inserción mediante iframe | Probada correctamente en otra web. |
+
+Las conexiones reales de la aplicación a MySQL y el envío/recepción de los correos de verificación y recuperación quedan comprobados funcionalmente. No equivalen a una auditoría independiente de TLS, permisos de archivos o de todas las políticas de seguridad.
+
+Pendiente de comprobar o documentar: permisos efectivos de config.php y carpetas privadas; existencia, frecuencia y retención de copias; restauración real de archivos y base de datos; versión exacta de MySQL y revisión menor de PHP; auditoría de TLS/cabeceras y controles de seguridad en producción más allá de estos recorridos; revisión ampliada de dispositivos, navegadores y accesibilidad. No se dan por verificadas estas medidas.
+
+El retraso de verificación no establece un plazo garantizado ni identifica como responsable a Gmail, Webempresa o el buzón receptor. No se han guardado correos de usuarios, enlaces de verificación, credenciales ni datos de reservas en este registro.
+
+Guía para futuras operaciones: MANTENIMIENTO.md. Las secciones de instalación siguientes son instrucciones de referencia para instalaciones nuevas, no acciones pendientes sobre esta instalación ya validada.

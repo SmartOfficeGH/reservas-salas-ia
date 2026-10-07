@@ -1,22 +1,44 @@
 # Aplicación Reserva Salas · Instalación
 
-La aplicación funcional está en `public/` y `private/`. Los archivos `index.html`, `prototipo.js` y `estilos.css` de la raíz conservan la demostración anterior: no deben subirse al sitio real. No se ha desplegado ni enviado ningún correo real.
+La aplicación funcional está en `public/` y `private/`. Los archivos `index.html`, `prototipo.js` y `estilos.css` de la raíz conservan la demostración anterior: no deben subirse al sitio real. El primer despliegue ya está validado manualmente por el usuario en Webempresa; el estado actual se detalla a continuación.
+
+## Cierre del primer despliegue — 7 de octubre de 2026
+
+Estado: primer despliegue funcional validado manualmente en Webempresa, según las comprobaciones comunicadas por el usuario. El agente documenta los resultados; no ha realizado estas operaciones en el servidor.
+
+| Comprobación en hosting | Resultado comunicado |
+|---|---|
+| Registro, recepción del correo y verificación | Correctos. El primer correo tardó aproximadamente tres minutos; causa del retraso no determinada. |
+| Inicio de sesión y recuperación de contraseña | Correctos; el correo de recuperación llegó rápidamente, sin medición exacta comunicada. |
+| Persistencia de reservas y cancelación | Funcionamiento comprobado. |
+| Usuario MySQL de la aplicación | Limitado a SELECT, INSERT, UPDATE y DELETE; funcionamiento comprobado con esos privilegios. |
+| Ocupación conjunta | Colores diferenciados y carriles separados, sin superposición. |
+| Consulta pública | Sin conceptos ni datos personales y sin posibilidad de reservar. |
+| Inserción mediante iframe | Probada correctamente en otra web. |
+
+Las conexiones reales de la aplicación a MySQL y el envío/recepción de los correos de verificación y recuperación quedan comprobados funcionalmente. No equivalen a una auditoría independiente de TLS, permisos de archivos o de todas las políticas de seguridad.
+
+Pendiente de comprobar o documentar: permisos efectivos de config.php y carpetas privadas; existencia, frecuencia y retención de copias; restauración real de archivos y base de datos; versión exacta de MySQL y revisión menor de PHP; auditoría de TLS/cabeceras y controles de seguridad en producción más allá de estos recorridos; revisión ampliada de dispositivos, navegadores y accesibilidad. No se dan por verificadas estas medidas.
+
+El retraso de verificación no establece un plazo garantizado ni identifica como responsable a Gmail, Webempresa o el buzón receptor. No se han guardado correos de usuarios, enlaces de verificación, credenciales ni datos de reservas en este registro.
+
+Guía para futuras operaciones: MANTENIMIENTO.md. Las secciones de instalación siguientes son instrucciones de referencia para instalaciones nuevas, no acciones pendientes sobre esta instalación ya validada.
 
 ## Parámetros de despliegue y estado de comprobación
 
 | Parámetro | Valor previsto | Estado |
 | --- | --- | --- |
-| URL | https://reservasalas.metavisuals.es | Aprobada; comprobar DNS y certificado HTTPS |
-| Carpeta pública | /home/delanada/public_html/reservasalas.metavisuals.es | Aprobada; verificar raíz del subdominio |
-| Carpeta privada | /home/delanada/reservas-salas-private | Propuesta; confirmar que PHP puede leerla con open_basedir |
-| Base | delanada_reservas_sala | Aprobada; crear/asignar en el panel |
-| Usuario MySQL | delanada_reservas_app | Aprobado; asignar permisos a esa base |
-| Host MySQL | localhost | Confirmado por soporte para PHP; conexión real pendiente |
-| Puerto MySQL | 3306 | Confirmado por soporte; conexión real pendiente |
-| Servidor SQL | MySQL con InnoDB, utf8mb4 y transacciones | Confirmar versión exacta y probar el esquema |
-| PHP | 8.4, revisión de seguridad más reciente disponible | Activar para este subdominio |
-| SMTP | smtp.gmail.com, puerto 587, STARTTLS | Salida permitida por soporte; autenticación, envío y entrega pendientes |
-| Usuario y remitente SMTP | smartofficepalma@gmail.com | Aprobados; comprobar disponibilidad de contraseña de aplicación en Google |
+| URL | https://reservasalas.metavisuals.es | Sitio en HTTPS usado en la validación; auditoría del certificado pendiente |
+| Carpeta pública | /home/delanada/public_html/reservasalas.metavisuals.es | Instalación funcional validada por el usuario |
+| Carpeta privada | /home/delanada/reservas-salas-private | Lectura funcional comprobada; permisos efectivos y restricciones pendientes de revisión |
+| Base | delanada_reservas_sala | En uso; persistencia y cancelación comprobadas |
+| Usuario MySQL | delanada_reservas_app | SELECT, INSERT, UPDATE y DELETE; funcionamiento comprobado |
+| Host MySQL | localhost | Confirmado por soporte; conexión funcional comprobada |
+| Puerto MySQL | 3306 | Confirmado por soporte; conexión funcional comprobada |
+| Servidor SQL | MySQL con InnoDB, utf8mb4 y transacciones | Esquema funcional; versión exacta y auditoría del motor pendientes |
+| PHP | 8.4, revisión de seguridad más reciente disponible | PHP 8.4 restablecido en el subdominio; mantener y comprobar en futuras actualizaciones |
+| SMTP | smtp.gmail.com, puerto 587, STARTTLS | Verificación y recuperación recibidas; auditoría TLS independiente pendiente |
+| Usuario y remitente SMTP | smartofficepalma@gmail.com | Envíos funcionales comprobados; credenciales solo en config.php |
 | Zona horaria | Europe/Madrid | Aplicada; tokens y fechas de auditoría en UTC |
 
 No compartas credenciales por chat ni las guardes en Git. La contraseña MySQL y la contraseña de aplicación de Gmail se introducen directamente en el servidor en `config.php`. La cuenta de Google necesita verificación en dos pasos y la opción de contraseñas de aplicación habilitada; si Google no la ofrece, hay que resolverlo antes de desplegar. No usar la contraseña habitual de Gmail ni desactivar la comprobación TLS.
@@ -36,7 +58,7 @@ Si usas las herramientas locales preparadas aquí, sustituye `composer` por `.to
 
 El ZIP de `dist/` contiene únicamente `public/`, `reservas-salas-private/`, el esquema SQL, las instrucciones y los manifiestos de dependencias. Excluye las credenciales, la base de pruebas, los enlaces de prueba, herramientas, pruebas y el prototipo. El paquete está excluido de Git.
 
-## Instalar en Webempresa (pendiente; no realizado)
+## Instalar en Webempresa (referencia para instalaciones nuevas)
 
 1. Confirmar los parámetros de la tabla anterior. Configurar el subdominio y su certificado HTTPS, y seleccionar PHP 8.4. [Webempresa documenta la disponibilidad de PHP 8.4](https://guias.webempresa.com/preguntas-frecuentes/versiones-php-disponibles/).
 2. Descomprimir el ZIP fuera de la carpeta pública. Copiar **el contenido** de `public/`, incluido `.htaccess`, a `/home/delanada/public_html/reservasalas.metavisuals.es`. No copiar la raíz del proyecto ni el resto del paquete a esa carpeta.
@@ -117,7 +139,7 @@ No se necesita migración SQL adicional para estas vistas. No se modificaron las
 
 Los recursos necesarios están en `public/brand/` y el tema en `public/corporativo.css`. Subir toda la carpeta pública, incluidos logo, fuentes y avisos OFL. No se necesita la carpeta original `RE__Estilo_corporativo_`, excluida de Git y del paquete. Véase `IDENTIDAD-CORPORATIVA.md` para procedencia, adaptación y limitaciones. No hay cambios de esquema ni de datos por este ajuste.
 
-Webempresa ha confirmado MySQL desde PHP en `localhost:3306` y salida SMTP a `smtp.gmail.com:587` con STARTTLS. Esto confirma los parámetros y la conectividad permitida por soporte, pero no una conexión real realizada: durante el despliegue aún hay que comprobar autenticación MySQL, permisos, TLS, autenticación Gmail y entrega al buzón. Las dos contraseñas permanecen vacías en el ejemplo y se introducirán únicamente en el servidor.
+Webempresa ha confirmado MySQL desde PHP en `localhost:3306` y salida SMTP a `smtp.gmail.com:587` con STARTTLS. El primer despliegue ya cuenta con conexión MySQL y correos de verificación/recuperación comprobados funcionalmente por el usuario. La auditoría independiente de TLS y los permisos de archivos siguen pendientes. Las dos contraseñas permanecen vacías en el ejemplo y se introducirán únicamente en el servidor.
 
 Revisión local: abrir http://127.0.0.1:8089/ y recargar con Ctrl+F5. Revisar acceso, registro, verificación, recuperación, agenda y Mis reservas; en la agenda comprobar el carrusel, fichas, formulario anterior al calendario y las tres vistas.
 
@@ -177,7 +199,7 @@ Extraer el nuevo paquete y copiar únicamente estos archivos, manteniendo sus no
 
 No requiere cambios SQL: no importar de nuevo las tablas ni los datos iniciales. No sobrescribir `config.php`, almacenamiento privado, reservas ni usuarios. Dependencias, imágenes, logos y mapas no cambian. El ZIP completo sirve también para instalaciones nuevas, pero esta actualización requiere solo los diez archivos anteriores. Conservar la documentación actualizada para consulta.
 
-No sustituir `.htaccess` en esta actualización: no ha cambiado. Mantener la precaución documentada arriba y comprobar que el subdominio sigue en PHP 8.4 — Personalizado. Tras una futura actualización autorizada, recargar sin caché y comprobar filtros, compartir y reserva/cancelación. Seguimos en PASO 13: revisión local previa al hosting, sin commit, push ni despliegue.
+No sustituir `.htaccess` en esta actualización: no ha cambiado. Mantener la precaución documentada arriba y comprobar que el subdominio sigue en PHP 8.4 — Personalizado. Tras una futura actualización autorizada, recargar sin caché y comprobar filtros, compartir y reserva/cancelación. Esta lista corresponde a la actualización conjunta ya instalada; el estado vigente es el cierre del primer despliegue documentado al inicio.
 
 ## Corrección de caché de CSS/JavaScript — 6 de octubre de 2026
 

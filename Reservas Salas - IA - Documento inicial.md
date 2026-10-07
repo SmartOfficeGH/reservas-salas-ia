@@ -87,7 +87,7 @@ La primera versión tendrá tres pantallas:
 ## 3. Decisiones pendientes
 
 - Límites de duración y antelación máxima de las reservas. No se exige antelación mínima de 24 horas y se permite reservar para el mismo día.
-- Confirmar la versión del servidor MySQL y validar la conexión real y el envío SMTP durante el despliegue. Soporte de Webempresa ha confirmado MySQL en localhost:3306 y salida a smtp.gmail.com:587 con STARTTLS; aún no se han probado las conexiones reales.
+- Documentar la versión exacta del servidor MySQL y completar las revisiones operativas y de seguridad pendientes. La conexión funcional con localhost:3306 y los correos de verificación y recuperación ya están comprobados en Webempresa según la validación manual del usuario.
 - Ampliar las comprobaciones de entrega en buzones palma.es y los demás recorridos en Webempresa. El primer envío y verificación funcionaron según la validación manual comunicada por el usuario; la causa de su retraso aproximado de tres minutos queda sin determinar.
 
 ## 4. Posibles mejoras para versiones posteriores
@@ -131,3 +131,25 @@ Los CSS y JavaScript públicos utilizan URLs versionadas mediante SHA-256 del co
 Validación manual comunicada por el usuario el 6 de octubre de 2026: la corrección de caché está desplegada en Webempresa y las salas se muestran separadas, con colores distintos y sin superposición. La vista pública conserva la privacidad y no permite reservar. Esta validación en el hosting la realizó el usuario; el agente no efectuó cambios en el servidor.
 
 El primer correo de verificación tardó aproximadamente tres minutos en llegar. El envío y la verificación mediante el enlace funcionaron. No se ha determinado la causa del retraso; esta observación no establece un tiempo de entrega garantizado ni demuestra que el retraso proceda de Gmail, Webempresa o el buzón receptor.
+
+## Cierre del primer despliegue — 7 de octubre de 2026
+
+Estado: primer despliegue funcional validado manualmente en Webempresa, según las comprobaciones comunicadas por el usuario. El agente documenta los resultados; no ha realizado estas operaciones en el servidor.
+
+| Comprobación en hosting | Resultado comunicado |
+|---|---|
+| Registro, recepción del correo y verificación | Correctos. El primer correo tardó aproximadamente tres minutos; causa del retraso no determinada. |
+| Inicio de sesión y recuperación de contraseña | Correctos; el correo de recuperación llegó rápidamente, sin medición exacta comunicada. |
+| Persistencia de reservas y cancelación | Funcionamiento comprobado. |
+| Usuario MySQL de la aplicación | Limitado a SELECT, INSERT, UPDATE y DELETE; funcionamiento comprobado con esos privilegios. |
+| Ocupación conjunta | Colores diferenciados y carriles separados, sin superposición. |
+| Consulta pública | Sin conceptos ni datos personales y sin posibilidad de reservar. |
+| Inserción mediante iframe | Probada correctamente en otra web. |
+
+Las conexiones reales de la aplicación a MySQL y el envío/recepción de los correos de verificación y recuperación quedan comprobados funcionalmente. No equivalen a una auditoría independiente de TLS, permisos de archivos o de todas las políticas de seguridad.
+
+Pendiente de comprobar o documentar: permisos efectivos de config.php y carpetas privadas; existencia, frecuencia y retención de copias; restauración real de archivos y base de datos; versión exacta de MySQL y revisión menor de PHP; auditoría de TLS/cabeceras y controles de seguridad en producción más allá de estos recorridos; revisión ampliada de dispositivos, navegadores y accesibilidad. No se dan por verificadas estas medidas.
+
+El retraso de verificación no establece un plazo garantizado ni identifica como responsable a Gmail, Webempresa o el buzón receptor. No se han guardado correos de usuarios, enlaces de verificación, credenciales ni datos de reservas en este registro.
+
+Guía para futuras operaciones: MANTENIMIENTO.md. Las secciones de instalación siguientes son instrucciones de referencia para instalaciones nuevas, no acciones pendientes sobre esta instalación ya validada.
